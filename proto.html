@@ -448,7 +448,7 @@
 		        const iconCode = data.weather[0].icon;
 		        const meteoconName = meteoconMap[iconCode] || 'not-available'; 
 		        const iconContainer = document.getElementById('icon-container');
-		        const iconURL = `<img src="https://cdn.jsdelivr.net/prod/gh/basementuniverse/meteocons/production/filled/animations/${meteoconName}.svg" alt="weather" width="100" height="100">`;
+		        const iconURL = `<img src="https://basmilius.github.io/meteocons/production/fill/svg/${meteoconName}.svg" alt="weather" width="100" height="100">`;
 				
 				console.log(iconURL); 
 				if(iconContainer) iconContainer.innerHTML = iconURL; } catch (err) { const descEl = document.getElementById('desc'); if(descEl) descEl.innerText = "Check API Key"; console.error(err); }
