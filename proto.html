@@ -426,34 +426,24 @@
 	// WEATHER (4)
 		const apiKey = '3705bab40a0bc21845733bbd24c752ba'; const lat = 40.7549; const lon = -73.9840;
 		const meteoconMap = {
-		    '01d': 'clear-day', '01n': 'clear-night',
-		    '02d': 'partly-cloudy-day', '02n': 'partly-cloudy-night',
-		    '03d': 'cloudy', '03n': 'cloudy',
-		    '04d': 'overcast-day', '04n': 'overcast-night',
-		    '09d': 'extreme-rain', '09n': 'extreme-rain',
-		    '10d': 'rain', '10n': 'rain',
-		    '11d': 'thunderstorms-day', '11n': 'thunderstorms-night',
-		    '13d': 'snow', '13n': 'snow',
-		    '50d': 'fog-day', '50n': 'fog-night'  };
-		
-		async function updateWeather() {
-		    try {
-		        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`);
-		        if (!res.ok) throw new Error('API Error');
-		        const data = await res.json();
-		        
+			    '01d': 'clear-day','01n': 'clear-night',
+			    '02d': 'partly-cloudy-day','02n': 'partly-cloudy-night',
+			    '03d': 'cloudy','03n': 'cloudy',
+			    '04d': 'overcast-day','04n': 'overcast-night',
+			    '09d': 'extreme-rain','09n': 'extreme-rain',
+			    '10d': 'rain','10n': 'rain',
+			    '11d': 'thunderstorms-day','11n': 'thunderstorms-night',
+			    '13d': 'snow','13n': 'snow',
+			    '50d': 'fog-day','50n': 'fog-night' };
+		async function updateWeather() { try {
+		        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`); if (!res.ok) throw new Error('API Error'); const data = await res.json();
 		        document.getElementById('temp').innerText = `${Math.round(data.main.temp)}°`;
 		        document.getElementById('desc').innerText = data.weather[0].description;
-				
 		        const iconCode = data.weather[0].icon;
 		        const meteoconName = meteoconMap[iconCode] || 'not-available'; 
 		        const iconContainer = document.getElementById('icon-container');
-		        const iconURL = `<img src="https://cdn.jsdelivr.net/prod/gh/basementuniverse/meteocons/production/filled/animations/${meteoconName}.svg" alt="weather" width="100" height="100">`;
-				
-				console.log(iconURL); 
-				if(iconContainer) iconContainer.innerHTML = iconURL; } catch (err) { const descEl = document.getElementById('desc'); if(descEl) descEl.innerText = "Check API Key"; console.error(err); }
-			} 
-		
+		        const iconURL = `<img src="https://cdn.meteocons.com/3.0.0-next.10/svg/fill/${meteoconName}.svg" alt="weather" width="100" height="100">`; 
+		        if(iconContainer) iconContainer.innerHTML = iconURL; } catch (err) { const descEl = document.getElementById('desc'); if(descEl) descEl.innerText = "Check API Key";  console.error(err); } } 
 		updateWeather();
 	
 	// NEWS
