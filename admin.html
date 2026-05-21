@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Display Admin - Upload Slides</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; }
+    input[type="text"], input[type="number"], input[type="file"] { width: 100%; padding: 8px; margin-top: 5px; }
+    button { background: #007bff; color: white; padding: 10px 15px; border: none; cursor: pointer; width: 100%; }
+    button:hover { background: #0056b3; }
+    #status { margin-top: 15px; font-weight: bold; color: green; }
+  </style>
+</head>
+<body>
+
+  <h2>Upload New Slide</h2>
+  <div class="form-group">
+    <label for="fileInput">Select Slide Image</label>
+    <input type="file" id="fileInput" accept="image/*">
+  </div>
+  <div class="form-group">
+    <label for="orderInput">Display Order (e.g., 1, 2, 3)</label>
+    <input type="number" id="orderInput" value="1">
+  </div>
+  <div class="form-group">
+    <label for="durationInput">Duration (in milliseconds, e.g., 5000 = 5s)</label>
+    <input type="number" id="durationInput" value="5000">
+  </div>
+  <button id="uploadBtn">Upload & Add to Playlist</button>
+  
+  <div id="status"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCQUoKboMug0By7UrR07c3R-C3NFUYQ0wA",
+        authDomain: "p2gm-displays.firebaseapp.com",
+        projectId: "p2gm-displays",
+        storageBucket: "p2gm-displays.firebasestorage.app",
+        messagingSenderId: "80141648110",
+        appId: "1:80141648110:web:f5aafa668e019376c433ff",
+        measurementId: "G-SG5K4C2H41"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const fileInput = document.getElementById('fileInput');
+    const orderInput = document.getElementById('orderInput');
+    const durationInput = document.getElementById('durationInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const statusDiv = document.getElementById('status');
+
+    uploadBtn.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      if (!file) {
+        alert('Please select an image file first!');
+        return;
+      }
+
+      statusDiv.innerText = "Uploading image...";
+      uploadBtn.disabled = true;
+
+      try {
+        // 2. Upload image file to Firebase Storage
+        const storageRef = ref(storage, 'slides/' + Date.now() + '_' + file.name);
+        const snapshot = await uploadBytes(storageRef, file);
+        const downloadUrl = await getDownloadURL(snapshot.ref);
+
+        statusDiv.innerText = "Saving slide data to database...";
+
+        // 3. Save metadata to Firestore
+        await addDoc(collection(db, "slides"), {
+          imageUrl: downloadUrl,
+          order: parseInt(orderInput.value) || 0,
+          duration: parseInt(durationInput.value) || 5000
+        });
+
+        statusDiv.innerText = "Slide successfully added to playlist!";
+        fileInput.value = ""; 
+      } catch (error) {
+        console.error(error);
+        statusDiv.innerText = "Error uploading slide. Check console.";
+      } finally {
+        uploadBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
