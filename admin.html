@@ -2,41 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Display Admin - Upload Slides</title>
+  <title>Display Admin - Upload & Manage Slides</title>
   <style>
-    body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+    body { font-family: sans-serif; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; background: #f9f9f9; }
+    .admin-container { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
     .form-group { margin-bottom: 15px; }
-    label { display: block; font-weight: bold; }
-    input[type="text"], input[type="number"], input[type="file"] { width: 100%; padding: 8px; margin-top: 5px; }
-    button { background: #007bff; color: white; padding: 10px 15px; border: none; cursor: pointer; width: 100%; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input[type="number"], input[type="file"] { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
     button:hover { background: #0056b3; }
-    #status { margin-top: 15px; font-weight: bold; color: green; }
+    button:disabled { background: #cccccc; cursor: not-allowed; }
+    #status { margin-top: 15px; font-weight: bold; color: #28a745; }
+    
+    /* Playlist Manager Styles */
+    .playlist-title { border-bottom: 2px solid #333; padding-bottom: 10px; margin-top: 40px; }
+    .slide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+    .slide-card { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+    .slide-card img { width: 100%; height: 130px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; background: #eee; }
+    .slide-info { font-size: 14px; margin-bottom: 10px; flex-grow: 1; }
+    .delete-btn { background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; width: auto; }
+    .delete-btn:hover { background: #bd2130; }
   </style>
 </head>
 <body>
 
-  <h2>Upload New Slide</h2>
-  <div class="form-group">
-    <label for="fileInput">Select Slide Image</label>
-    <input type="file" id="fileInput" accept="image/*">
+  <div class="admin-container">
+    <h2>Upload New Slide</h2>
+    <div class="form-group">
+      <label for="fileInput">Select Slide Image</label>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+    <div class="form-group">
+      <label for="orderInput">Display Order (e.g., 1, 2, 3)</label>
+      <input type="number" id="orderInput" value="1">
+    </div>
+    <div class="form-group">
+      <label for="durationInput">Duration (in milliseconds, e.g., 5000 = 5s)</label>
+      <input type="number" id="durationInput" value="5000">
+    </div>
+    <button id="uploadBtn">Upload & Add to Playlist</button>
+    <div id="status"></div>
   </div>
-  <div class="form-group">
-    <label for="orderInput">Display Order (e.g., 1, 2, 3)</label>
-    <input type="number" id="orderInput" value="1">
-  </div>
-  <div class="form-group">
-    <label for="durationInput">Duration (in milliseconds, e.g., 5000 = 5s)</label>
-    <input type="number" id="durationInput" value="5000">
-  </div>
-  <button id="uploadBtn">Upload & Add to Playlist</button>
-  
-  <div id="status"></div>
+
+  <h2 class="playlist-title">Current Slide Playlist</h2>
+  <div class="slide-grid" id="slideGrid">
+    </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-storage.js";
 
+    // 1. YOUR FIREBASE CONFIGURATION
     const firebaseConfig = {
         apiKey: "AIzaSyCQUoKboMug0By7UrR07c3R-C3NFUYQ0wA",
         authDomain: "p2gm-displays.firebaseapp.com",
@@ -52,12 +69,15 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
+    // Dom Elements
     const fileInput = document.getElementById('fileInput');
     const orderInput = document.getElementById('orderInput');
     const durationInput = document.getElementById('durationInput');
     const uploadBtn = document.getElementById('uploadBtn');
     const statusDiv = document.getElementById('status');
+    const slideGrid = document.getElementById('slideGrid');
 
+    // --- UPLOAD FLOW ---
     uploadBtn.addEventListener('click', async () => {
       const file = fileInput.files[0];
       if (!file) {
@@ -69,14 +89,12 @@
       uploadBtn.disabled = true;
 
       try {
-        // 2. Upload image file to Firebase Storage
         const storageRef = ref(storage, 'slides/' + Date.now() + '_' + file.name);
         const snapshot = await uploadBytes(storageRef, file);
         const downloadUrl = await getDownloadURL(snapshot.ref);
 
         statusDiv.innerText = "Saving slide data to database...";
 
-        // 3. Save metadata to Firestore
         await addDoc(collection(db, "slides"), {
           imageUrl: downloadUrl,
           order: parseInt(orderInput.value) || 0,
@@ -91,6 +109,55 @@
       } finally {
         uploadBtn.disabled = false;
       }
+    });
+
+    // --- REAL-TIME PLAYLIST MANAGER FLOW ---
+    const q = query(collection(db, "slides"), orderBy("order", "asc"));
+    
+    onSnapshot(q, (snapshot) => {
+      slideGrid.innerHTML = ""; // Clear existing UI items
+
+      if (snapshot.empty) {
+        slideGrid.innerHTML = "<p>No slides currently in rotation.</p>";
+        return;
+      }
+
+      snapshot.forEach((slideDoc) => {
+        const slideData = slideDoc.data();
+        const slideId = slideDoc.id; // Keep track of the document's random unique ID
+
+        // Create a display card for each slide item
+        const card = document.createElement('div');
+        card.className = 'slide-card';
+        
+        card.innerHTML = `
+          <img src="${slideData.imageUrl}" alt="Slide thumbnail">
+          <div class="slide-info">
+            <strong>Position:</strong> ${slideData.order}<br>
+            <strong>Duration:</strong> ${(slideData.duration / 1000)}s
+          </div>
+        `;
+
+        // Create the Delete button programmatically to safely bind the event
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete-btn';
+        deleteButton.innerText = 'Delete Slide';
+        deleteButton.addEventListener('click', async () => {
+          if (confirm("Are you sure you want to delete this slide from rotation?")) {
+            try {
+              await deleteDoc(doc(db, "slides", slideId));
+              // Notice we don't need code to delete it from the website DOM layout.
+              // Firebase's real-time sync detects the document is gone and runs this entire onSnapshot loop again!
+            } catch (err) {
+              console.error("Error deleting document: ", err);
+              alert("Failed to delete slide.");
+            }
+          }
+        });
+
+        card.appendChild(deleteButton);
+        slideGrid.appendChild(card);
+      });
     });
   </script>
 </body>
