@@ -374,6 +374,10 @@
   let slideshowTimeout = null;
   const slideImg = document.getElementById('slide-element');
 
+  // Polyfill the 'global' variable for browser compatibility
+    if (typeof global === 'undefined') {
+      var global = window;
+    }
   // 2. Setup Real-time Listener ordered by 'order' attribute
   const q = query(collection(db, "slides"), orderBy("order", "asc"));
   
