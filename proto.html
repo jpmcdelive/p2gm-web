@@ -263,7 +263,7 @@
 			  		}
 			  		.grid-container {
 			    		grid-template-columns: 1fr 1fr !important;
-			    		grid-template-rows: .39fr .8fr .19fr 0fr 0fr 13vh;
+			    		grid-template-rows: .3fr .5fr .15fr 0fr .69fr 16vh;
 			  		}
 			  		.item-1 {
 			    		grid-column: 1 / 3;
@@ -348,90 +348,7 @@
 				} 
 			}
 		</style>
-	</head>	
-
-
-
-
-
-
-
-<script type="module">
-  window.global = window;
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-	const firebaseConfig = {
-        apiKey: "AIzaSyCQUoKboMug0By7UrR07c3R-C3NFUYQ0wA",
-        authDomain: "p2gm-displays.firebaseapp.com",
-        projectId: "p2gm-displays",
-        storageBucket: "p2gm-displays.firebasestorage.app",
-        messagingSenderId: "80141648110",
-        appId: "1:80141648110:web:f5aafa668e019376c433ff",
-        measurementId: "G-SG5K4C2H41"
-    };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  let slides = [];
-  let currentSlideIndex = 0;
-  let slideshowTimeout = null;
-  const slideImg = document.getElementById('slide-element');
-
-  // Polyfill the 'global' variable for browser compatibility
-    if (typeof global === 'undefined') {
-      var global = window;
-    }
-  // 2. Setup Real-time Listener ordered by 'order' attribute
-  const q = query(collection(db, "slides"), orderBy("order", "asc"));
-  
-  onSnapshot(q, (snapshot) => {
-    // Re-build playlist array whenever Firestore data updates
-    slides = snapshot.docs.map(doc => doc.data());
-    
-    // Reset/Restart loop dynamically if the playlist changes
-    clearTimeout(slideshowTimeout);
-    
-    if (slides.length > 0) {
-      currentSlideIndex = 0;
-      runSlideshow();
-    } else {
-      slideImg.src = "";
-      slideImg.alt = "No slides found in database.";
-    }
-  });
-
-  // 3. The Playlist Engine Loop
-  function runSlideshow() {
-    if (slides.length === 0) return;
-
-    const currentSlide = slides[currentSlideIndex];
-    
-    // Set the image src to the Firebase Storage URL
-    slideImg.src = currentSlide.imageUrl;
-    
-    // Queue up the next slide transition based on custom duration
-    slideshowTimeout = setTimeout(() => {
-      currentSlideIndex = (currentSlideIndex + 1) % slides.length;
-      runSlideshow();
-    }, currentSlide.duration);
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
+	</head>
 	<body> 
 		<div class="grid-container">
 			<div class="grid-item item-1" id="main-content">
@@ -465,23 +382,24 @@
 		  	</div>
 		</div>
 	</body>
+	<script type="module">
+		window.global = window;
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+		import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+		const firebaseConfig = { apiKey: "AIzaSyCQUoKboMug0By7UrR07c3R-C3NFUYQ0wA", authDomain: "p2gm-displays.firebaseapp.com", projectId: "p2gm-displays",
+		        storageBucket: "p2gm-displays.firebasestorage.app", messagingSenderId: "80141648110", appId: "1:80141648110:web:f5aafa668e019376c433ff", measurementId: "G-SG5K4C2H41" };
+		  const app = initializeApp(firebaseConfig);  const db = getFirestore(app);  let slides = [];  let currentSlideIndex = 0;  let slideshowTimeout = null;
+		  const slideImg = document.getElementById('slide-element');
+		    if (typeof global === 'undefined') { var global = window; } const q = query(collection(db, "slides"), orderBy("order", "asc"));
+		  onSnapshot(q, (snapshot) => { slides = snapshot.docs.map(doc => doc.data()); clearTimeout(slideshowTimeout);
+		    if (slides.length > 0) { currentSlideIndex = 0; runSlideshow();} else { slideImg.src = ""; slideImg.alt = "No slides found in database."; } });
+		  function runSlideshow() {if (slides.length === 0) return;
+		    const currentSlide = slides[currentSlideIndex]; slideImg.src = currentSlide.imageUrl; slideshowTimeout = setTimeout(() => {
+		      currentSlideIndex = (currentSlideIndex + 1) % slides.length; runSlideshow(); }, currentSlide.duration); }
+	</script>
 	<script>
-	// MAIN (1)
-	const imageElement = document.querySelector('.item-1 img'); 
-	const images = ['1.png', '2.png', '3.png', '4.png', '5.png']; 
-	let currentIndexa = 0;
-	
-	setInterval(() => { 
-		currentIndexa = (currentIndexa + 1) % images.length; 
-		if(imageElement) imageElement.src = 'content/' + images[currentIndexa];
-	}, 10000);
-
 	// SCHEDULE (2)
-	function updateSchedule(){
-		const now = new Date();
-		const currentMinutes = (now.getHours() * 60) + now.getMinutes();
-		let statusText = "Free Time";
-		
+	function updateSchedule(){ const now = new Date(); const currentMinutes = (now.getHours() * 60) + now.getMinutes(); let statusText = "Free Time";
 		const schedule = [
 			{name: "bk.png", start: 480, end: 530},  // 08:00-08:50 bk
 			{name: "p1.png", start: 530, end: 580},  // 08:50-09:40 p1
@@ -493,17 +411,9 @@
 			{name: "p7.png", start: 840, end: 890},  // 02:00-02:50 prep
 			{name: "cl.png", start: 890, end: 960}   // 02:50-04:00 gn
 		];
-
 		const activePeriod = schedule.find(p => currentMinutes >= p.start && currentMinutes < p.end);
-		
-		if (activePeriod) {
-			statusText = activePeriod.name;
-		} else if (currentMinutes < 480) {
-			statusText = "bk.png";
-		} else if (currentMinutes >= 960) {
-			statusText = "cl.png";
-		}
-
+		if (activePeriod) { statusText = activePeriod.name; } else if (currentMinutes < 480) { statusText = "bk.png"; } 
+		else if (currentMinutes >= 960) { statusText = "cl.png"; }
 		var Image_Id = document.getElementById('schedule-period'); 
 		if(Image_Id) {
 			var newURL = "schedule/" + statusText;
