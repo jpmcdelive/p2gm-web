@@ -143,25 +143,7 @@
       }
     });
 
-import { db } from './firebaseConfig'; // Your initialized Firebase app
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 
-const updateDisplayContent = async (quote, author, dayOffDate) => {
-  const docRef = doc(db, "displayConfig", "globalSettings");
-
-  try {
-    await updateDoc(docRef, {
-      currentQuote: quote,
-      quoteAuthor: author,
-      nextDayOff: dayOffDate, // Format: YYYY-MM-DD
-      lastUpdated: serverTimestamp()
-    });
-    console.log("Display updated successfully!");
-  } catch (error) {
-    console.error("Error updating display: ", error);
-  }
-};
-    
     // --- REAL-TIME PLAYLIST MANAGER FLOW ---
     const q = query(collection(db, "slides"), orderBy("order", "asc"));
     
@@ -220,6 +202,67 @@ const updateDisplayContent = async (quote, author, dayOffDate) => {
         slideGrid.appendChild(card);
       });
     });
+  </script>
+  <script>
+    import { db } from './firebaseConfig'; // Your initialized Firebase app
+import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+
+const updateDisplayContent = async (quote, author, dayOffDate) => {
+  const docRef = doc(db, "displayConfig", "globalSettings");
+
+  try {
+    await updateDoc(docRef, {
+      currentQuote: quote,
+      quoteAuthor: author,
+      nextDayOff: dayOffDate, // Format: YYYY-MM-DD
+      lastUpdated: serverTimestamp()
+    });
+    console.log("Display updated successfully!");
+  } catch (error) {
+    console.error("Error updating display: ", error);
+  }
+};
+
+// something
+    
+import { useEffect, useState } from 'react';
+import { db } from './firebaseConfig';
+import { doc, onSnapshot } from 'firebase/firestore';
+
+function SignageDisplay() {
+  const [displayData, setDisplayData] = useState(null);
+
+  useEffect(() => {
+    const docRef = doc(db, "displayConfig", "globalSettings");
+    
+    // Real-time listener
+    const unsubscribe = onSnapshot(docRef, (doc) => {
+      if (doc.exists()) {
+        setDisplayData(doc.data());
+      } else {
+        console.log("No such document!");
+      }
+    });
+
+    return () => unsubscribe(); // Clean up listener on unmount
+  }, []);
+
+  if (!displayData) return <div>Loading display content...</div>;
+
+  return (
+    <div className="signage-container">
+      <div className="quote-section">
+        <h1>"{displayData.currentQuote}"</h1>
+        <p>- {displayData.quoteAuthor}</p>
+      </div>
+      
+      <div className="schedule-section">
+        <h2>Next Day Off: {displayData.nextDayOff}</h2>
+      </div>
+    </div>
+  );
+}
+    
   </script>
 </body>
 </html>
