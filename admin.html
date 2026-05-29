@@ -226,14 +226,14 @@ const updateDisplayContent = async (quote, author, dayOffDate) => {
 // something
     
 import { useEffect, useState } from 'react';
-import { db } from './firebaseConfig';
+import { dba } from './firebaseConfig';
 import { doc, onSnapshot } from 'firebase/firestore';
 
 function SignageDisplay() {
   const [displayData, setDisplayData] = useState(null);
 
   useEffect(() => {
-    const docRef = doc(db, "displayConfig", "globalSettings");
+    const docRef = doc(dba, "displayConfig", "globalSettings");
     
     // Real-time listener
     const unsubscribe = onSnapshot(docRef, (doc) => {
