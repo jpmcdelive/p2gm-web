@@ -110,4 +110,505 @@
 				display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; 
 				overflow: hidden; 
 				color: black;
-				font-size: 1
+				font-size: 1.4vw;
+				font-weight:600;
+				margin-bottom: 0 !important;
+				padding-bottom: 0 !important; 
+			}
+			.article-content p {
+				padding:3px 10px;
+				margin:0;
+				color: black;
+				display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; 
+				overflow: hidden; 
+				min-height: 120px;
+				background: white; 
+			}
+/* DAY DATE TIME */
+			#day {
+				font-size:4vh;
+				font-weight:100;
+				line-height:.85;
+			}
+			#date {
+				font-size:5vh;
+				font-weight:400;
+				line-height:1;
+			}
+			#time {
+				font-size: 6vh;
+				line-height:1;
+				font-weight:700
+			}
+/* LAYOUT GRID */
+			.grid-container {
+				display: grid;
+				grid-template-columns: 18vw auto 18vw;
+				grid-template-rows: 18vh 14vh 8vh 8vh 32vh 18vh;
+				gap: .4vh;
+				width: 100%;
+				height: 100%;
+				background: #000;
+				overflow: hidden;
+			}
+			.grid-item {
+				display: flex;
+				align-items: unset;
+				justify-content: left;
+				color: white;
+				font-weight: 600;    
+				margin-block-start: 0;
+				margin-block-end: 0;
+				min-height: 0;
+			}
+			.grid-item img, #media-container video {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+			#media-container {
+				width: 100%;
+				height: 100%;
+			}
+			.item-1 {
+				grid-column: 1 / span 2;
+				grid-row: 1 / span 5;
+				background-color: #000;
+			}
+			.item-3 {
+				grid-column: 3;
+				grid-row: 1 / span 2;
+			}
+			.item-4 {
+				grid-column: 3;
+				grid-row: 3;
+				background-color: rgba(119, 119, 119, 1);
+				align-items: center; 
+				display: block;
+			}
+			.item-5 {
+				grid-column: 3;
+				grid-row: 4;
+				background: deepskyblue;
+			}
+			.item-6 {
+				grid-column: 3;
+				grid-row: 5;
+				background-color: #000;
+			}
+			.item-7 {
+				grid-column: 1;
+				grid-row: 6;
+				background-color: antiquewhite;
+				overflow: hidden;
+				width: 100%;
+			}
+			.item-8 {
+				grid-column: 2;
+				grid-row: 6;
+				background-color: rgba(82, 82, 82, 1);
+				align-items: center;
+			}
+			.item-9 {
+				grid-column: 3;
+				grid-row: 6;
+				background: rgba(60, 60, 60, 1);
+				display: block;
+				padding: 1vh 2vh;
+			}
+
+/* MOBILE RESPONSIVE */
+			@media (max-width: 768px) {
+				h1 {
+					font-size: 3vw;
+				}
+				.grid-container {
+					grid-template-columns: 1fr 1fr !important;
+					grid-template-rows: .3fr .5fr .15fr 0fr .69fr 16vh;
+				}
+				.item-1 {
+					grid-column: 1 / span 2;
+					grid-row: 2 / 3;
+				}
+				.item-2 {
+					grid-column: 3;
+					grid-row: 1 / 2;
+				}
+				.item-3 {
+					grid-column: 3;
+					grid-row: 5 / 6;
+					background-color: antiquewhite;
+				}
+				.item-4 {
+					grid-column: 3;
+					grid-row: 4 / 5;
+					background-color: rgba(119, 119, 119, 1);
+					align-items: center; 
+				}
+				.item-5 {
+					grid-column: 3;
+					grid-row: 3 / 5;
+					background: rgba(94, 94, 94, 1);
+					padding-top: 8px;
+				}
+				.item-6 {
+					grid-column: 3;
+					grid-row: 5 / 6;
+					background-color: #000;
+				}
+				.item-7 {
+					grid-column: 1;
+					grid-row: 1 / 2;
+					background-color: antiquewhite;
+					overflow: hidden;
+				}
+				.item-8 {
+					grid-column: 2;
+					grid-row: 6 / 7;
+					background-color: rgba(82, 82, 82, 1);
+					align-items: center;
+				}
+				.item-9 {
+					grid-column: 3;
+					grid-row: 3 / 4;
+					background: rgba(60, 60, 60, 1);
+					padding: 3vw;
+				}
+				#next-day-off h3 {   
+					font-size: 4vw; 
+				}
+				#next-day-off p {
+					font-size: 3vw;
+				}
+				#day {				
+					font-size:6vw;
+				}
+				#date {
+					font-size:7vw;
+				}
+				#time {
+					font-size: 10vw;
+				}
+				.article-content h3 { 
+					font-size: 5vw;
+				}
+				#temp { 
+					font-size: 13vw;
+				}
+				.grid-container { 
+					overflow: unset; 
+				}
+				.current-description { 
+					font-size: 4vw; font-weight: 200; margin-top: 15px; line-height: .9; 
+				}
+				h1 { 
+					padding: 15px; 
+				}
+			} 
+		</style>
+	</head>
+	<body> 
+		<div class="grid-container">
+			<div class="grid-item item-1" id="main-content">
+				<div id="media-container">
+					<p class="loading">Loading playlist...</p>
+				</div>
+			</div>
+		 	<div class="grid-item item-2" id="schoolname">
+				<img src="school site/school.png" alt="Pathways to Graduation Manhattan"/>
+			</div>
+			<div class="grid-item item-3" id="schedule-widget">
+				<img id="schedule-period" src=""/>
+			</div>
+			<div class="grid-item item-4" id="next-day-off">
+				<h3>NEXT DAY OFF</h3>
+				<p>Loading schedule updates...</p>
+			</div>
+			<div class="grid-item item-5" id="weather-widget">
+				<span id="icon-container"></span>
+				<span id="temp">--°</span>
+				<span id="desc" class="current-description">Loading...</span>
+			</div>
+			<div class="grid-item item-6" id="news-widget">
+				<div id="carousel-content"><div id="loading-message" class="loading">Loading news...</div></div>
+			</div>
+			<div class="grid-item item-7" id="site">
+				<img src="school site/site.png" alt="Pathways to Graduation Manhattan"/>
+			</div>
+			<div class="grid-item item-8" id="quotation">
+				<h1>Loading quote...</h1>
+			</div>
+			<div class="grid-item item-9" id="timedate">
+				<div id="day"></div><div id="date"></div><div id="time"></div> 
+			</div>
+		</div>
+	</body>
+
+	<script type="module">
+		window.global = window;
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+		import { getFirestore, collection, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+		
+		const firebaseConfig = { 
+			apiKey: "AIzaSyCQUoKboMug0By7UrR07c3R-C3NFUYQ0wA", 
+			authDomain: "p2gm-displays.firebaseapp.com", 
+			projectId: "p2gm-displays",
+			storageBucket: "p2gm-displays.firebasestorage.app", 
+			messagingSenderId: "80141648110", 
+			appId: "1:80141648110:web:f5aafa668e019376c433ff", 
+			measurementId: "G-SG5K4C2H41" 
+		};
+
+		const app = initializeApp(firebaseConfig);  
+		const db = getFirestore(app);  
+		let slides = [];  
+		let currentSlideIndex = 0;  
+		let slideshowTimeout = null;
+		
+		const mediaContainer = document.getElementById('media-container');
+		if (typeof global === 'undefined') { var global = window; } 
+		
+		// 1. ORIGINAL SLIDESHOW REAL-TIME LISTENER
+		const q = query(collection(db, "slides"), orderBy("order", "asc"));
+		onSnapshot(q, (snapshot) => { 
+			slides = snapshot.docs.map(doc => doc.data()); 
+			if (slideshowTimeout) clearTimeout(slideshowTimeout);
+			
+			if (slides.length > 0) { 
+				currentSlideIndex = 0; 
+				runSlideshow();
+			} else { 
+				mediaContainer.innerHTML = '<p class="error">No slides found in database.</p>'; 
+			} 
+		});
+		
+		// 2. NEW LOGIC: REAL-TIME LISTENER FOR QUOTE AND DAY OFF
+		const quotationContainer = document.getElementById('quotation');
+		const dayOffContainer = document.getElementById('next-day-off');
+		const globalConfigRef = doc(db, "displayConfig", "globalSettings");
+
+		onSnapshot(globalConfigRef, (docSnap) => {
+			if (docSnap.exists()) {
+				const data = docSnap.data();
+				
+				// Dynamically render Quote and Author safely
+				if (data.currentQuote) {
+					const authorString = data.quoteAuthor ? ` —${data.quoteAuthor}` : '';
+					quotationContainer.innerHTML = `<h1>${data.currentQuote}${authorString}</h1>`;
+				} else {
+					quotationContainer.innerHTML = `<h1>No active quote configuration set.</h1>`;
+				}
+
+				// Dynamically render Next Day Off Date string
+				if (data.nextDayOff) {
+					// Human-friendly processing if it's stored as YYYY-MM-DD
+					const dateParts = data.nextDayOff.split('-');
+					let displayDate = data.nextDayOff;
+					if(dateParts.length === 3) {
+						const dateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+						displayDate = dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+					}
+					dayOffContainer.innerHTML = `<h3>NEXT DAY OFF</h3><p>${displayDate}</p>`;
+				} else {
+					dayOffContainer.innerHTML = `<h3>NEXT DAY OFF</h3><p>None scheduled</p>`;
+				}
+			}
+		});
+		
+		function runSlideshow() {
+			if (slides.length === 0 || !mediaContainer) return;
+			
+			if (slideshowTimeout) clearTimeout(slideshowTimeout);
+			
+			const currentSlide = slides[currentSlideIndex];
+			const type = currentSlide.type || 'image'; 
+			
+			mediaContainer.innerHTML = ''; 
+
+			if (type === 'video') {
+				const videoEl = document.createElement('video');
+				videoEl.src = currentSlide.imageUrl;
+				videoEl.autoplay = true;
+				videoEl.muted = true;
+				videoEl.playsInline = true;
+				videoEl.style.width = "100%";
+				videoEl.style.height = "100%";
+				videoEl.style.objectFit = "cover";
+
+				videoEl.onended = () => {
+					advanceSlide();
+				};
+
+				videoEl.onerror = () => {
+					console.error("Video asset playback failed, skipping...");
+					advanceSlide();
+				};
+
+				mediaContainer.appendChild(videoEl);
+			} else {
+				const imgEl = document.createElement('img');
+				imgEl.src = currentSlide.imageUrl;
+				imgEl.alt = "Signage slide";
+				
+				mediaContainer.appendChild(imgEl);
+				
+				slideshowTimeout = setTimeout(advanceSlide, currentSlide.duration || 5000);
+			}
+		}
+
+		function advanceSlide() {
+			currentSlideIndex = (currentSlideIndex + 1) % slides.length; 
+			runSlideshow();
+		}
+	</script>
+
+	<script>
+	// SCHEDULE (2)
+	function updateSchedule(){ const now = new Date(); const currentMinutes = (now.getHours() * 60) + now.getMinutes(); let statusText = "Free Time";
+		const schedule = [
+			{name: "bk.png", start: 480, end: 530},  // 08:00-08:50 bk
+			{name: "p1.png", start: 530, end: 580},  // 08:50-09:40 p1
+			{name: "p2.png", start: 580, end: 632},  // 09:40-10:32 p2
+			{name: "p3.png", start: 632, end: 686},  // 10:32-11:24 p3
+			{name: "lc.png", start: 686, end: 738},  // 11:26-12:18 lch
+			{name: "p5.png", start: 738, end: 788},  // 12:18-01:08 p5
+			{name: "p6.png", start: 788, end: 840},  // 01:08-02:00 p6
+			{name: "p7.png", start: 840, end: 890},  // 02:00-02:50 prep
+			{name: "cl.png", start: 890, end: 960}   // 02:50-04:00 gn
+		];
+		const activePeriod = schedule.find(p => currentMinutes >= p.start && currentMinutes < p.end);
+		if (activePeriod) { statusText = activePeriod.name; } else if (currentMinutes < 480) { statusText = "bk.png"; } 
+		else if (currentMinutes >= 960) { statusText = "cl.png"; }
+		var Image_Id = document.getElementById('schedule-period'); 
+		if(Image_Id) {
+			var newURL = "schedule/" + statusText;
+			Image_Id.src = newURL;
+			console.log("PERIOD: " + newURL);
+		}
+	}
+	updateSchedule();
+	setInterval(updateSchedule, 60000);
+
+	// WEATHER (4)
+		const apiKey = '3705bab40a0bc21845733bbd24c752ba'; const lat = 40.7549; const lon = -73.9840;
+		const meteoconMap = {
+			    '01d': 'clear-day','01n': 'clear-night',
+			    '02d': 'partly-cloudy-day','02n': 'partly-cloudy-night',
+			    '03d': 'cloudy','03n': 'cloudy',
+			    '04d': 'overcast-day','04n': 'overcast-night',
+			    '09d': 'extreme-rain','09n': 'extreme-rain',
+			    '10d': 'rain','10n': 'rain',
+			    '11d': 'thunderstorms-day','11n': 'thunderstorms-night',
+			    '13d': 'snow','13n': 'snow',
+			    '50d': 'fog-day','50n': 'fog-night' };
+		async function updateWeather() { try {
+				const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`); if (!res.ok) throw new Error('API Error'); const data = await res.json();
+				document.getElementById('temp').innerText = `${Math.round(data.main.temp)}°`;
+				document.getElementById('desc').innerText = data.weather[0].description;
+				const iconCode = data.weather[0].icon;
+				const meteoconName = meteoconMap[iconCode] || 'not-available'; 
+				const iconContainer = document.getElementById('icon-container');
+				const iconURL = `<img src="https://cdn.meteocons.com/3.0.0-next.10/svg/fill/${meteoconName}.svg" alt="weather" width="100" height="100">`; 
+				if(iconContainer) iconContainer.innerHTML = iconURL; } catch (err) { const descEl = document.getElementById('desc'); if(descEl) descEl.innerText = "Check API Key";  console.error(err); } } 
+		updateWeather();
+	
+	// NEWS
+	const NYT_API_KEY = "fA2AACnKOZWVnU8C0kcCLkivelqlxDQc";
+	const NYT_SECTION = "home";
+	const apiUrl = `https://api.nytimes.com/svc/topstories/v2/${NYT_SECTION}.json?api-key=${NYT_API_KEY}`;
+	const ARTICLE_COUNT = 3;
+	let articlesData = [];
+	let currentIndex = 0;
+	
+	const carouselContent = document.getElementById('carousel-content');
+	const loadingMessage = document.getElementById('loading-message');
+
+	function renderArticle(index){
+		if(articlesData.length === 0 || !carouselContent) return;
+		const article = articlesData[index];
+		let imageUrl = "";
+		let imageAlt = "Article image";
+		
+		if(article.multimedia && article.multimedia.length > 0){
+			const image = article.multimedia[2] || article.multimedia[0];
+			imageUrl = image.url;
+			imageAlt = image.caption || article.title;
+		}
+		
+		carouselContent.innerHTML = `
+			<div class="article-card">
+				<div class="article-content">${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}" class="article-image">` : ''}
+					<h3>${article.title}</h3>
+					<p>${article.abstract}</p>
+				</div>
+			</div>`;
+	}
+
+	async function fetchNews(){
+		try {
+			const response = await fetch(apiUrl);
+			if(!response.ok){
+				if(response.status === 401 || response.status === 403){
+					throw new Error("API Key error. Make sure your key is correct.");
+				}
+				throw new Error(`Network error: ${response.statusText}`);
+			}
+			const data = await response.json();
+			articlesData = data.results.filter(a => a.title && a.url && a.abstract).slice(0, ARTICLE_COUNT);
+			
+			if(articlesData.length === 0){
+				throw new Error("No valid articles found.");
+			}
+			
+			if(loadingMessage) loadingMessage.style.display = 'none';
+			currentIndex = 0;
+			renderArticle(currentIndex);
+		} catch(error) {
+			console.error("Failed to fetch news:", error);
+			if(loadingMessage) {
+				loadingMessage.textContent = `Failed to load news. ${error.message}`;
+				loadingMessage.className = 'error';
+			}
+		}
+	}
+
+	const nextArticle = function(){
+		currentIndex = (currentIndex + 1) % articlesData.length;
+		renderArticle(currentIndex);
+	};
+	
+	setInterval(nextArticle, 10000);
+	document.addEventListener('DOMContentLoaded', fetchNews);
+
+	// DAY DATE TIME (8)
+	var setDaydatetime = function(){
+		const now = new Date();
+		const timeOptions = {hour: 'numeric', minute: '2-digit', hour12: true};
+		const formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+		const timeEl = document.getElementById('time');
+		if(timeEl) timeEl.textContent = formattedTime;
+	};
+
+	const clockNow = new Date();
+	const dayOptions = {weekday: 'long'};
+	const dayEl = document.getElementById('day');
+	if(dayEl) dayEl.textContent = new Intl.DateTimeFormat('en-US', dayOptions).format(clockNow);
+
+	function getOrdinalDate(date){
+		const day = date.getDate();
+		const s = ['th', 'st', 'nd', 'rd'];
+		const v = day % 100;
+		return day + (s[(v - 20) % 10] || s[v] || s[0]);
+	}
+
+	const monthYearOptions = {year: 'numeric', month: 'long'};
+	const monthYear = new Intl.DateTimeFormat('en-US', monthYearOptions).format(clockNow);
+	const fullDateText = monthYear.replace(/\d+/, getOrdinalDate(clockNow));
+	const dateEl = document.getElementById('date');
+	if(dateEl) dateEl.textContent = fullDateText;
+
+	setDaydatetime();
+	setInterval(setDaydatetime, 10000);
+</script>
+</html>
