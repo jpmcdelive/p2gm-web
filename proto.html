@@ -455,7 +455,7 @@
 					videoId: currentSlide.youtubeId,
 					playerVars: {
 						'autoplay': 1,
-						'mute': 1,        // Crucial: Autoplay will fail if not muted
+						'mute': 0,        // Crucial: Autoplay will fail if not muted
 						'controls': 0,    // Hides player timeline controls
 						'rel': 0,         // Prevents unrelated video recommendations
 						'modestbranding': 1
@@ -481,7 +481,7 @@
 				const videoEl = document.createElement('video');
 				videoEl.src = currentSlide.imageUrl;
 				videoEl.autoplay = true;
-				videoEl.muted = true;
+				videoEl.muted = false;
 				videoEl.playsInline = true;
 				videoEl.style.width = "100%";
 				videoEl.style.height = "100%";
