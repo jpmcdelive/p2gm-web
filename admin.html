@@ -101,6 +101,7 @@
     input[type="number"], 
     input[type="file"], 
     input[type="text"], 
+    select,
     input[type="date"] {
       width: 100%;
       padding: 10px 12px;
@@ -112,7 +113,7 @@
       transition: all 0.2s ease;
     }
 
-    input:focus {
+    input:focus, select:focus {
       outline: none;
       border-color: var(--primary);
       background-color: #fff;
@@ -238,6 +239,7 @@
     }
     .badge-image { background: #d4edda; color: #155724; }
     .badge-video { background: #d1ecf1; color: #0c5460; }
+    .badge-youtube { background: #f8d7da; color: #721c24; }
 
     .delete-btn {
       background: #fff;
@@ -296,19 +298,37 @@
 
       <div class="admin-card">
         <h2>Upload Playlist Slide</h2>
+        
         <div class="form-group">
+          <label for="typeSelect">Content Format Source</label>
+          <select id="typeSelect">
+            <option value="upload">Local Binary Upload (Image/Video File)</option>
+            <option value="youtube">External YouTube Video Stream</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="uploadInputGroup">
           <label for="fileInput">Select Image or Video Clip</label>
           <input type="file" id="fileInput" accept="image/*,video/*">
         </div>
+
+        <div class="form-group" id="youtubeInputGroup" style="display: none;">
+          <label for="youtubeUrlInput">YouTube Link or Video ID</label>
+          <input type="text" id="youtubeUrlInput" placeholder="Paste watch URL or 11-char ID">
+          <small class="context-tip">Accepts browser URLs, share links, or direct IDs.</small>
+        </div>
+
         <div class="form-group">
           <label for="orderInput">Display Sequence Order</label>
           <input type="number" id="orderInput" value="1" min="1">
         </div>
-        <div class="form-group">
+        
+        <div class="form-group" id="durationFormGroup">
           <label for="durationInput">Static Slide Duration (ms)</label>
           <input type="text" id="durationInput" value="5000">
           <small class="context-tip" id="durationContext"></small>
         </div>
+        
         <button id="uploadBtn" class="btn-primary">Process & Append Slide</button>
         <div id="status" class="status-msg"></div>
       </div>
@@ -353,6 +373,12 @@
     const updateContentBtn = document.getElementById('updateContentBtn');
     const contentStatus = document.getElementById('contentStatus');
 
+    const typeSelect = document.getElementById('typeSelect');
+    const uploadInputGroup = document.getElementById('uploadInputGroup');
+    const youtubeInputGroup = document.getElementById('youtubeInputGroup');
+    const youtubeUrlInput = document.getElementById('youtubeUrlInput');
+    const durationFormGroup = document.getElementById('durationFormGroup');
+
     const fileInput = document.getElementById('fileInput');
     const orderInput = document.getElementById('orderInput');
     const durationInput = document.getElementById('durationInput');
@@ -363,6 +389,27 @@
     const slideCounter = document.getElementById('slideCounter');
 
     const globalConfigRef = doc(db, "displayConfig", "globalSettings");
+
+    // --- INTERFACE SELECT FORM DYNAMIC TOGGLE ---
+    typeSelect.addEventListener('change', () => {
+      if (typeSelect.value === 'youtube') {
+        uploadInputGroup.style.display = 'none';
+        youtubeInputGroup.style.display = 'block';
+        durationFormGroup.style.display = 'none'; // Videos manage native end timings
+      } else {
+        uploadInputGroup.style.display = 'block';
+        youtubeInputGroup.style.display = 'none';
+        durationFormGroup.style.display = 'block';
+        fileInput.dispatchEvent(new Event('change')); // Trigger check to restore fields
+      }
+    });
+
+    // --- REGEX URL CLEANER FOR YOUTUBE ---
+    function extractYouTubeId(urlOrId) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = urlOrId.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : urlOrId.trim();
+    }
 
     // --- REAL-TIME DATA DESK HYDRATION ---
     onSnapshot(globalConfigRef, (docSnap) => {
@@ -414,50 +461,93 @@
       }
     });
 
-    // --- SLIDE UPLOAD ENGINE ---
+    // --- UNIFIED SLIDE ROUTING UPLOAD ENGINE ---
     uploadBtn.addEventListener('click', async () => {
-      const file = fileInput.files[0];
-      if (!file) {
-        alert('Attach a localized media file asset before initializing upload.');
-        return;
-      }
-
-      const isVideo = file.type.startsWith('video/');
-      const mediaType = isVideo ? 'video' : 'image';
-
+      const mode = typeSelect.value;
+      
       statusDiv.className = "status-msg status-info";
-      statusDiv.innerText = `Pushing binary ${mediaType} track...`;
       uploadBtn.disabled = true;
 
-      try {
-        const storageRef = ref(storage, 'slides/' + Date.now() + '_' + file.name);
-        const snapshot = await uploadBytes(storageRef, file);
-        const downloadUrl = await getDownloadURL(snapshot.ref);
+      // PATH A: PROCESS YOUTUBE LINK STRINGS
+      if (mode === 'youtube') {
+        const rawString = youtubeUrlInput.value;
+        const cleanedId = extractYouTubeId(rawString);
 
-        statusDiv.innerText = "Publishing schema manifest entries...";
+        if (!cleanedId || cleanedId.length !== 11) {
+          alert('Provide a valid 11-digit YouTube video signature string identifier.');
+          statusDiv.innerText = "";
+          uploadBtn.disabled = false;
+          return;
+        }
 
-        const displayDuration = isVideo ? 0 : (parseInt(durationInput.value) || 5000);
+        statusDiv.innerText = "Registering streaming schema index manifest...";
 
-        await addDoc(collection(db, "slides"), {
-          imageUrl: downloadUrl,
-          order: parseInt(orderInput.value) || 1,
-          duration: displayDuration,
-          type: mediaType
-        });
+        try {
+          await addDoc(collection(db, "slides"), {
+            imageUrl: "", // Left empty or parsed to keep document structures uniform
+            youtubeId: cleanedId,
+            order: parseInt(orderInput.value) || 1,
+            duration: 0, // Driven dynamically by the iframe event handlers
+            type: 'youtube'
+          });
 
-        statusDiv.className = "status-msg status-success";
-        statusDiv.innerText = "Track appended into slideshow sequence!";
-        fileInput.value = ""; 
-        durationInput.value = "5000";
-        durationInput.disabled = false;
-        durationContext.innerText = "";
-        setTimeout(() => { statusDiv.innerText = ""; }, 4000);
-      } catch (error) {
-        console.error(error);
-        statusDiv.className = "status-msg status-error";
-        statusDiv.innerText = "Upload sequence rejected. Check console logs.";
-      } finally {
-        uploadBtn.disabled = false;
+          statusDiv.className = "status-msg status-success";
+          statusDiv.innerText = "YouTube stream added into playlist queue!";
+          youtubeUrlInput.value = "";
+          setTimeout(() => { statusDiv.innerText = ""; }, 4000);
+
+        } catch (error) {
+          console.error(error);
+          statusDiv.className = "status-msg status-error";
+          statusDiv.innerText = "Failed to sync YouTube document data metadata structures.";
+        } finally {
+          uploadBtn.disabled = false;
+        }
+
+      // PATH B: ORIGINAL LOCAL BINARY FILE UPLOAD OBJECT ARCHITECTURE
+      } else {
+        const file = fileInput.files[0];
+        if (!file) {
+          alert('Attach a localized media file asset before initializing upload.');
+          statusDiv.innerText = "";
+          uploadBtn.disabled = false;
+          return;
+        }
+
+        const isVideo = file.type.startsWith('video/');
+        const mediaType = isVideo ? 'video' : 'image';
+        statusDiv.innerText = `Pushing binary ${mediaType} track...`;
+
+        try {
+          const storageRef = ref(storage, 'slides/' + Date.now() + '_' + file.name);
+          const snapshot = await uploadBytes(storageRef, file);
+          const downloadUrl = await getDownloadURL(snapshot.ref);
+
+          statusDiv.innerText = "Publishing schema manifest entries...";
+          const displayDuration = isVideo ? 0 : (parseInt(durationInput.value) || 5000);
+
+          await addDoc(collection(db, "slides"), {
+            imageUrl: downloadUrl,
+            youtubeId: "", // Default fallbacks 
+            order: parseInt(orderInput.value) || 1,
+            duration: displayDuration,
+            type: mediaType
+          });
+
+          statusDiv.className = "status-msg status-success";
+          statusDiv.innerText = "Track appended into slideshow sequence!";
+          fileInput.value = ""; 
+          durationInput.value = "5000";
+          durationInput.disabled = false;
+          durationContext.innerText = "";
+          setTimeout(() => { statusDiv.innerText = ""; }, 4000);
+        } catch (error) {
+          console.error(error);
+          statusDiv.className = "status-msg status-error";
+          statusDiv.innerText = "Upload sequence rejected. Check console logs.";
+        } finally {
+          uploadBtn.disabled = false;
+        }
       }
     });
 
@@ -480,12 +570,16 @@
         const card = document.createElement('div');
         card.className = 'slide-card';
         
+        // Render previews based on content types
         let previewMarkup = `<img src="${slideData.imageUrl}" alt="Slide">`;
         if (type === 'video') {
           previewMarkup = `<video src="${slideData.imageUrl}" muted autoplay loop playsinline></video>`;
+        } else if (type === 'youtube') {
+          // Leverage standard YouTube img thumbnail server hooks to display admin panels
+          previewMarkup = `<img src="https://img.youtube.com/vi/${slideData.youtubeId}/hqdefault.jpg" alt="YouTube Preview">`;
         }
 
-        const calculatedDisplayTiming = type === 'video' ? 'Full Asset Length' : `${(slideData.duration / 1000)}s`;
+        const calculatedDisplayTiming = (type === 'video' || type === 'youtube') ? 'Full Asset Length' : `${(slideData.duration / 1000)}s`;
         
         card.innerHTML = `
           <div class="media-preview-box">${previewMarkup}</div>
@@ -493,6 +587,7 @@
             <span class="badge badge-${type}">${type}</span>
             <div><strong>Position:</strong> Sequence #${slideData.order}</div>
             <div><strong>Timing:</strong> ${calculatedDisplayTiming}</div>
+            ${type === 'youtube' ? `<div><strong>Video ID:</strong> ${slideData.youtubeId}</div>` : ''}
           </div>
         `;
 
