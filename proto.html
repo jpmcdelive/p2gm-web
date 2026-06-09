@@ -354,7 +354,7 @@
 		</div>
 	</body>
 
-	<script type="module">
+<script type="module">
 		window.global = window;
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 		import { getFirestore, collection, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
@@ -374,9 +374,18 @@
 		let slides = [];  
 		let currentSlideIndex = 0;  
 		let slideshowTimeout = null;
+		let ytPlayer = null; // Holds the active YouTube player instance
 		
 		const mediaContainer = document.getElementById('media-container');
 		if (typeof global === 'undefined') { var global = window; } 
+
+		// Asynchronously load the YouTube Player API
+		if (!window.YT) {
+			const tag = document.createElement('script');
+			tag.src = "https://www.youtube.com/iframe_api";
+			const firstScriptTag = document.getElementsByTagName('script')[0];
+			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+		}
 		
 		// 1. ORIGINAL SLIDESHOW REAL-TIME LISTENER
 		const q = query(collection(db, "slides"), orderBy("order", "asc"));
@@ -392,7 +401,7 @@
 			} 
 		});
 		
-		// 2. NEW LOGIC: REAL-TIME LISTENER FOR QUOTE AND DAY OFF
+		// 2. REAL-TIME LISTENER FOR QUOTE AND DAY OFF
 		const quotationContainer = document.getElementById('quotation');
 		const dayOffContainer = document.getElementById('next-day-off');
 		const globalConfigRef = doc(db, "displayConfig", "globalSettings");
@@ -400,8 +409,6 @@
 		onSnapshot(globalConfigRef, (docSnap) => {
 			if (docSnap.exists()) {
 				const data = docSnap.data();
-				
-				// Dynamically render Quote and Author safely
 				if (data.currentQuote) {
 					const authorString = data.quoteAuthor ? ` —${data.quoteAuthor}` : '';
 					quotationContainer.innerHTML = `<h1>${data.currentQuote}${authorString}</h1>`;
@@ -409,9 +416,7 @@
 					quotationContainer.innerHTML = `<h1>No active quote configuration set.</h1>`;
 				}
 
-				// Dynamically render Next Day Off Date string
 				if (data.nextDayOff) {
-					// Human-friendly processing if it's stored as YYYY-MM-DD
 					const dateParts = data.nextDayOff.split('-');
 					let displayDate = data.nextDayOff;
 					if(dateParts.length === 3) {
@@ -429,13 +434,50 @@
 			if (slides.length === 0 || !mediaContainer) return;
 			
 			if (slideshowTimeout) clearTimeout(slideshowTimeout);
+			// Clean up previous YouTube player reference safely
+			ytPlayer = null; 
 			
 			const currentSlide = slides[currentSlideIndex];
 			const type = currentSlide.type || 'image'; 
 			
 			mediaContainer.innerHTML = ''; 
 
-			if (type === 'video') {
+			if (type === 'youtube' && currentSlide.youtubeId) {
+				// Create placeholder div for the YouTube iframe replacement
+				const ytTarget = document.createElement('div');
+				ytTarget.id = 'youtube-player-target';
+				mediaContainer.appendChild(ytTarget);
+
+				// Initialize the player
+				ytPlayer = new window.YT.Player('youtube-player-target', {
+					height: '100%',
+					width: '100%',
+					videoId: currentSlide.youtubeId,
+					playerVars: {
+						'autoplay': 1,
+						'mute': 1,        // Crucial: Autoplay will fail if not muted
+						'controls': 0,    // Hides player timeline controls
+						'rel': 0,         // Prevents unrelated video recommendations
+						'modestbranding': 1
+					},
+					events: {
+						'onReady': (event) => {
+							event.target.playVideo();
+						},
+						'onStateChange': (event) => {
+							// If video ends, advance immediately to the next item
+							if (event.data === window.YT.PlayerState.ENDED) {
+								advanceSlide();
+							}
+						},
+						'onError': (err) => {
+							console.error("YouTube playback error, skipping...", err);
+							advanceSlide();
+						}
+					}
+				});
+
+			} else if (type === 'video') {
 				const videoEl = document.createElement('video');
 				videoEl.src = currentSlide.imageUrl;
 				videoEl.autoplay = true;
@@ -445,21 +487,17 @@
 				videoEl.style.height = "100%";
 				videoEl.style.objectFit = "cover";
 
-				videoEl.onended = () => {
-					advanceSlide();
-				};
-
+				videoEl.onended = () => { advanceSlide(); };
 				videoEl.onerror = () => {
 					console.error("Video asset playback failed, skipping...");
 					advanceSlide();
 				};
-
 				mediaContainer.appendChild(videoEl);
+
 			} else {
 				const imgEl = document.createElement('img');
 				imgEl.src = currentSlide.imageUrl;
 				imgEl.alt = "Signage slide";
-				
 				mediaContainer.appendChild(imgEl);
 				
 				slideshowTimeout = setTimeout(advanceSlide, currentSlide.duration || 5000);
