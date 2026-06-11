@@ -1,0 +1,29 @@
+{
+  "short_name": "P2Gm Signage",
+  "name": "P2Gm Digital Signage @ The Manhattan Hub",
+  "description": "Real-time automated digital signage display loop for Pathways to Graduation Manhattan.",
+  "icons": [
+    {
+      "src": "android-icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "android-icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-icon-180x180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    }
+  ],
+  "start_url": "../proto.html",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "display": "fullscreen",
+  "orientation": "landscape"
+}
