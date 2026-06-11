@@ -1,282 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head> 
-		<title>P2Gm Digital Signage @ The Manhattan Hub</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="apple-touch-icon" sizes="180x180" href="/p2gm-web/school%20site/apple-icon-180x180.png"><link rel="icon" type="image/png" sizes="192x192"  href="/p2gm-web/school%20site/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="512x512"  href="/p2gm-web/school%20site/android-icon-512x512.png"><link rel="icon" type="image/png" sizes="32x32" href="/p2gm-web/school%20site/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/p2gm-web/school%20site/favicon-16x16.png"><link rel="manifest" href="/p2gm-web/school%20site/manifest.json"><link rel="icon" type="image/x-icon" href="/p2gm-web/school%20site/favicon.ico">
-		<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+		<title>P2Gm Digital Signage @ The Manhattan Hub</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="apple-touch-icon" sizes="180x180" href="/p2gm-web/school%20site/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192" href="/p2gm-web/school%20site/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="512x512" href="/p2gm-web/school%20site/android-icon-512x512.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/p2gm-web/school%20site/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/p2gm-web/school%20site/favicon-16x16.png">
+		<link rel="manifest" href="/p2gm-web/school%20site/manifest.json">
+		<link rel="icon" type="image/x-icon" href="/p2gm-web/school%20site/favicon.ico">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 		<script>window.global = window;</script>
 		<style>
-			html{font-size:1vw;}
-			body{font-family:"Fira Sans Condensed",sans-serif;font-weight:400;color:#fff;margin:0;background:#000;padding:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;}
-/* QUOTE */
-			.quote h1 {margin:0;text-align:left;line-height:1;}
-			.quote h2 {color:darkslategray;}
-/* ERROR */
-			.loading,.error {text-align:center;padding:2vw;font-size:2vw;color:#777}
-/* SCHEDULE */
-			#schedule-widget { 
-				font-weight:400;
-				text-align: center; 
-			}
+			html { font-size: 1vw; }
+			body { font-family: "Fira Sans Condensed", sans-serif; font-weight: 400; color: #fff; margin: 0; background: #000; padding: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; }
+			.quote h1 { margin: 0; text-align: left; line-height: 1; }
+			.quote h2 { color: darkslategray; }
+			.loading, .error { text-align: center; padding: 2vw; font-size: 2vw; color: #777; }
+			#schedule-widget { font-weight: 400; text-align: center; }
 			#quotation { padding: 2vw; }
-			#quotation h1 { font-weight: 600; font-size: 4vh; }
-			#schedule-period { 
-				font-size: 2vh; 
-				text-transform: uppercase; 
-				color: #555; 
-				width: 100%;
-				height: 100%;
-				object-fit: fill;
-			}
-/* NDO */
-			#next-day-off {
-				padding: 1vh;
-			}
-			#next-day-off h3 { 
-				margin:0; 
-				font-size: 2.6vh; 
-				text-align: center;
-			}
-			#next-day-off p { 
-				margin:0; 
-				font-weight: 300; 
-				font-size: 2.5vh;
-				text-align: center;
-			}
-/* WEATHER */
-			.current-weather {
-				display:flex;
-			}
-			.current-temp {
-				font-size:3.5rem;
-				font-weight:600;
-				line-height:1;
-				padding:1vw 0 0 2vw
-			}
-			.current-condition {
-				text-align:center;
-				padding:0 2vh 0 0
-			}
-			.current-icon {
-				width:90px;
-				height:110px
-			}
-			#desc {
-				font-size: 1vw;
-				font-weight: 400;
-				color: #fff;
-				line-height: 1;
-				margin-top: 2vh;
-				margin-left:.5vw;
-			}
-			#temp { 
-				font-size: 3vw; 
-				color: #fff;
-				line-height: 1.3;
-				margin-left:-1vw;
-			}
-			#icon-container { 
-				height: 90px; 
-				width: 119px;
-			}
-			#icon-container img {
-				width: 7vh;
-				height: 9vh;
-				padding: 0 1.5vh;
-				margin-top:-1vh;
-			}
-			div img {
-				width: 100%;
-			}
-/* NEWS */
-			.article-card {
-				display:flex;
-				height: fit-content;
-			}
-			.article-image {
-				object-fit: cover;
-				margin-bottom: 3px; 
-				height: 23vh;
-			}
-			.article-content {
-				flex-grow:1;
-				min-width:0;		
-				margin:0; 
-				BACKGROUND: white; 
-			}
-			.article-content h3 { 
-				margin-top: 2px;
-				padding: 1px 10px;
-				line-height: 1;
-				display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; 
-				overflow: hidden; 
-				color: black;
-				font-size: 1.4vw;
-				font-weight:600;
-				margin-bottom: 0 !important;
-				padding-bottom: 0 !important; 
-			}
-			.article-content p {
-				padding:8px 10px;
-				margin:0;
-				color: black;
-				display: line-clamp: 4; -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; 
-				overflow: hidden; 
-				min-height: 120px;
-				background: white; 
-				font-weight: normal; 
-			}
-/* DAY DATE TIME */
-			#day {
-				font-size:2vh;
-				font-weight:400;
-				line-height:.85;
-			}
-			#date {
-				font-size:2vh;
-				font-weight:400;
-				line-height:.85;
-			}
-			#time {
-				font-size: 5.8vh;
-				line-height:1;
-				font-weight:700
-			}
-/* LAYOUT GRID */
-			.grid-container {
-				display: grid;
-				grid-template-columns: 14vw 72vw 14vw;
-				grid-template-rows: 26vh 8vh 7.3vh auto 14vh;
-				gap: .4vh;
-				width: 100%;
-				height: 100%;
-				background: #000;
-				overflow: hidden;
-			}
-			.grid-item {
-				display: flex;
-				align-items: unset;
-				justify-content: left;
-				color: white;
-				font-weight: 600;    
-				margin-block-start: 0;
-				margin-block-end: 0;
-				min-height: 0;
-			}
-			.grid-item img, #media-container video, #media-container img {
-				object-fit: cover;
-				display: block;
-				width: 100%; 
-			}
-			#media-container { 
-				width: 100%;
-			    height: 100%;
-			    overflow: hidden;
-			}
+			#quotation h1 { font-weight: 600; font-size: 4vh; margin: 0; }
+			#schedule-period { font-size: 2vh; text-transform: uppercase; color: #555; width: 100%; height: 100%; object-fit: fill; }
+			#next-day-off { padding: 1vh; }
+			#next-day-off h3 { margin: 0; font-size: 2.6vh; text-align: center; }
+			#next-day-off p { margin: 0; font-weight: 300; font-size: 2.5vh; text-align: center; }
+			.current-weather { display: flex; }
+			.current-temp { font-size: 3.5rem; font-weight: 600; line-height: 1; padding: 1vw 0 0 2vw; }
+			.current-condition { text-align: center; padding: 0 2vh 0 0; }
+			.current-icon { width: 90px; height: 110px; }
+			#desc { font-size: 1vw; font-weight: 400; color: #fff; line-height: 1; margin-top: 2vh; margin-left: .5vw; }
+			#temp { font-size: 3vw; color: #fff; line-height: 1.3; margin-left: -1vw; }
+			#icon-container { height: 90px; width: 119px; }
+			#icon-container img { width: 7vh; height: 9vh; padding: 0 1.5vh; margin-top: -1vh; }
+			div img { width: 100%; }
+			.article-card { display: flex; height: fit-content; }
+			.article-image { object-fit: cover; margin-bottom: 3px; height: 23vh; }
+			.article-content { flex-grow: 1; min-width: 0; margin: 0; background: white; }
+			.article-content h3 { margin-top: 2px; padding: 1px 10px; line-height: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; color: black; font-size: 1.4vw; font-weight: 600; margin-bottom: 0 !important; padding-bottom: 0 !important; }
+			.article-content p { padding: 8px 10px; margin: 0; color: black; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; min-height: 120px; background: white; font-weight: normal; }
+			#day { font-size: 2vh; font-weight: 400; line-height: .85; }
+			#date { font-size: 2vh; font-weight: 400; line-height: .85; }
+			#time { font-size: 5.8vh; line-height: 1; font-weight: 700; }
+			.grid-container { display: grid; grid-template-columns: 14vw 72vw 14vw; grid-template-rows: 26vh 8vh 7.3vh auto 14vh; gap: .4vh; width: 100%; height: 100%; background: #000; overflow: hidden; }
+			.grid-item { display: flex; align-items: unset; justify-content: left; color: white; font-weight: 600; margin-block-start: 0; margin-block-end: 0; min-height: 0; }
+			.grid-item img, #media-container video, #media-container img { object-fit: cover; display: block; width: 100%; }
+			#media-container { width: 100%; height: 100%; overflow: hidden; }
 			#media-container video, #media-container img { height: 100%; }
-			.item-1 {
-				grid-column: 1 / span 2;
-				grid-row: 1 / span 4;
-				background-color: #000;
-				object-fit: fill;
-				place-self: center;
-				width: 100%;
-    			height: 100%;
-    			overflow: hidden;
-			}
-			.item-3 {
-				grid-column: 3;
-				grid-row: 1;
-			}
-			.item-4 {
-				grid-column: 3;
-				grid-row: 2;
-				background-color: rgba(119, 119, 119, 1);
-				align-items: center; 
-				display: block;
-			}
-			.item-5 {
-				grid-column: 3;
-				grid-row: 3;
-				background: cornflowerblue;
-			}
-			.item-6 {
-				grid-column: 3;
-				grid-row: 4;
-				background-color: #fff;
-				overflow: hidden; 
-			}
-			.item-7 {
-				grid-column: 1;
-				grid-row: 5;
-				background-color: antiquewhite;
-				overflow: hidden;
-				width: 100%;
-			}
-			.item-8 {
-				grid-column: 2;
-				grid-row: 5;
-				background-color: rgba(82, 82, 82, 1);
-				align-items: center;
-			}
-			.item-9 {
-				grid-column: 3;
-				grid-row: 5;
-				background: rgba(60, 60, 60, 1);
-				display: block;
-				padding: 3.4vh 1.8vh;
-			}
+			.item-1 { grid-column: 1 / span 2; grid-row: 1 / span 4; background-color: #000; object-fit: fill; place-self: center; width: 100%; height: 100%; overflow: hidden; }
+			.item-3 { grid-column: 3; grid-row: 1; }
+			.item-4 { grid-column: 3; grid-row: 2; background-color: rgba(119, 119, 119, 1); align-items: center; display: block; }
+			.item-5 { grid-column: 3; grid-row: 3; background: cornflowerblue; }
+			.item-6 { grid-column: 3; grid-row: 4; background-color: #fff; overflow: hidden; }
+			.item-7 { grid-column: 1; grid-row: 5; background-color: antiquewhite; overflow: hidden; width: 100%; }
+			.item-8 { grid-column: 2; grid-row: 5; background-color: rgba(82, 82, 82, 1); align-items: center; }
+			.item-9 { grid-column: 3; grid-row: 5; background: rgba(60, 60, 60, 1); display: block; padding: 3.4vh 1.8vh; }
 
-/* MOBILE RESPONSIVE */
 			@media (max-width: 768px) {
-				h1 {
-					font-size: 3vw;
-				}
-				.grid-container {
-					grid-template-columns: 50vw 50vw;
-					grid-template-rows: 16vh 35vh 8vh 28vh 12vh;
-					grid-template-rows: 16dvh 35dvh 8dvh 28dvh 12dvh;
-					overflow: unset; 
-				}
-				.item-7 {
-					grid-column: 1;
-					grid-row: 1;
-				}
-				.item-9 {
-					grid-column: 2;
-					grid-row: 1;
-				}
-				.item-1 {
-					grid-column: 1 / span 2;
-					grid-row: 2;
-				}
-				.item-4 {
-					grid-column: 1;
-					grid-row: 3;
-					align-items: center; 
-				}
-				.item-5 {
-					grid-column: 2;
-					grid-row: 3;
-					overflow: hidden; 
-				}
-				.item-3 {
-					grid-column: 1;
-					grid-row: 4;
-				}
-				.item-6 {
-					grid-column: 2;
-					grid-row: 4;
-				}
-				.item-8 {
-					grid-column: 1 / span 2;
-					grid-row: 5;
-					align-items: center;
-				}
+				h1 { font-size: 3vw; }
+				.grid-container { grid-template-columns: 50vw 50vw; grid-template-rows: 16vh 35vh 8vh 28vh 12vh; overflow: unset; }
+				.item-7 { grid-column: 1; grid-row: 1; }
+				.item-9 { grid-column: 2; grid-row: 1; }
+				.item-1 { grid-column: 1 / span 2; grid-row: 2; }
+				.item-4 { grid-column: 1; grid-row: 3; align-items: center; }
+				.item-5 { grid-column: 2; grid-row: 3; overflow: hidden; }
+				.item-3 { grid-column: 1; grid-row: 4; }
+				.item-6 { grid-column: 2; grid-row: 4; }
+				.item-8 { grid-column: 1 / span 2; grid-row: 5; align-items: center; }
 				#quotation h1 { font-size: 2vh; font-weight: 400; }
 				#date { font-size: 2.2vh; margin-left: 3px; }
 				#day { font-size: 2.2vh; }
-				#temp { font-size: 6bh; }
 				#desc { font-size: 2vh; }
 				.article-content h3 { font-size: 2vh; }
 				.article-content p { font-size: 1.5vh; }
@@ -284,7 +80,6 @@
 				body { overflow: unset; }
 				#temp { font-size: 6vh; }
 				#time { font-size: 5.5vh; }
-				#desc { font-size: 2vh; }
 				.item-7 img { object-fit: fill; }
 				.article-image { height: 15dvh; }
 			}
@@ -297,11 +92,8 @@
 					<p class="loading">Loading playlist...</p>
 				</div>
 			</div>
-	<!--	 	<div class="grid-item item-2" id="schoolname">
-				<img src="school%20site/school.png" alt="Pathways to Graduation Manhattan"/>
-			</div>   -->
 			<div class="grid-item item-3" id="schedule-widget">
-				<img id="schedule-period" src=""/>
+				<img id="schedule-period" src="" alt="Schedule status"/>
 			</div>
 			<div class="grid-item item-4" id="next-day-off">
 				<h3>NEXT DAY OFF</h3>
@@ -327,7 +119,7 @@
 		</div>
 	</body>
 
-<script type="module">
+	<script type="module">
 		window.global = window;
 		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 		import { getFirestore, collection, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
@@ -347,12 +139,48 @@
 		let slides = [];  
 		let currentSlideIndex = 0;  
 		let slideshowTimeout = null;
-		let ytPlayer = null; // Holds the active YouTube player instance
+		let ytPlayer = null; 
 		
 		const mediaContainer = document.getElementById('media-container');
-		if (typeof global === 'undefined') { var global = window; } 
 
-		// Asynchronously load the YouTube Player API
+		// --- INLINE SERVICE WORKER FOR LOCAL MEDIA CACHING ---
+		if ('serviceWorker' in navigator) {
+			const swCode = `
+				const CACHE_NAME = 'signage-media-v1';
+				self.addEventListener('install', (e) => self.skipWaiting());
+				self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+				
+				self.addEventListener('fetch', (e) => {
+					const url = e.request.url;
+					// Intercept Firebase Storage assets and local media folders
+					if (url.includes('firebasestorage.googleapis.com') || url.includes('/schedule/') || url.includes('school%20site/')) {
+						e.respondWith(
+							caches.open(CACHE_NAME).then((cache) => {
+								return cache.match(e.request).then((cachedResponse) => {
+									if (cachedResponse) {
+										// Fetch in background to update cache quietly
+										fetch(e.request).then((networkResponse) => {
+											if (networkResponse.status === 200) cache.put(e.request, networkResponse);
+										}).catch(() => {});
+										return cachedResponse;
+									}
+									return fetch(e.request).then((networkResponse) => {
+										if (networkResponse.status === 200 || networkResponse.status === 26) {
+											cache.put(e.request, networkResponse.clone());
+										}
+										return networkResponse;
+									});
+								});
+							})
+						);
+					}
+				});
+			`;
+			const blob = new Blob([swCode], { type: 'application/javascript' });
+			const swUrl = URL.createObjectURL(blob);
+			navigator.serviceWorker.register(swUrl).catch(err => console.error("SW Registration failed:", err));
+		}
+
 		if (!window.YT) {
 			const tag = document.createElement('script');
 			tag.src = "https://www.youtube.com/iframe_api";
@@ -360,7 +188,6 @@
 			firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 		}
 		
-		// 1. ORIGINAL SLIDESHOW REAL-TIME LISTENER
 		const q = query(collection(db, "slides"), orderBy("order", "asc"));
 		onSnapshot(q, (snapshot) => { 
 			slides = snapshot.docs.map(doc => doc.data()); 
@@ -374,7 +201,6 @@
 			} 
 		});
 		
-		// 2. REAL-TIME LISTENER FOR QUOTE AND DAY OFF
 		const quotationContainer = document.getElementById('quotation');
 		const dayOffContainer = document.getElementById('next-day-off');
 		const globalConfigRef = doc(db, "displayConfig", "globalSettings");
@@ -405,66 +231,48 @@
 		
 		function runSlideshow() {
 			if (slides.length === 0 || !mediaContainer) return;
-			
 			if (slideshowTimeout) clearTimeout(slideshowTimeout);
-			// Clean up previous YouTube player reference safely
 			ytPlayer = null; 
 			
 			const currentSlide = slides[currentSlideIndex];
 			const type = currentSlide.type || 'image'; 
-			
 			mediaContainer.innerHTML = ''; 
 
 			if (type === 'youtube' && currentSlide.youtubeId) {
-				// Create placeholder div for the YouTube iframe replacement
 				const ytTarget = document.createElement('div');
 				ytTarget.id = 'youtube-player-target';
 				mediaContainer.appendChild(ytTarget);
 
-				// Initialize the player
 				ytPlayer = new window.YT.Player('youtube-player-target', {
 					height: '100%',
 					width: '100%',
 					videoId: currentSlide.youtubeId,
 					playerVars: {
 						'autoplay': 1,
-						'mute': 0,        // Crucial: Autoplay will fail if not muted
-						'controls': 0,    // Hides player timeline controls
-						'rel': 0,         // Prevents unrelated video recommendations
+						'mute': 1,        
+						'controls': 0,    
+						'rel': 0,         
 						'modestbranding': 1
 					},
 					events: {
-						'onReady': (event) => {
-							event.target.playVideo();
-						},
-						'onStateChange': (event) => {
-							// If video ends, advance immediately to the next item
-							if (event.data === window.YT.PlayerState.ENDED) {
-								advanceSlide();
-							}
-						},
-						'onError': (err) => {
-							console.error("YouTube playback error, skipping...", err);
-							advanceSlide();
-						}
+						'onReady': (event) => { event.target.playVideo(); },
+						'onStateChange': (event) => { if (event.data === window.YT.PlayerState.ENDED) { advanceSlide(); } },
+						'onError': (err) => { console.error("YouTube error, skipping...", err); advanceSlide(); }
 					}
 				});
 
 			} else if (type === 'video') {
 				const videoEl = document.createElement('video');
+				// Service worker intercepts this URL and returns local cached file instantly
 				videoEl.src = currentSlide.imageUrl;
 				videoEl.autoplay = true;
-				videoEl.muted = false;
+				videoEl.muted = true;      
 				videoEl.playsInline = true;
 				videoEl.style.width = "100%";
 				videoEl.style.height = "100%";
 				videoEl.style.objectFit = "cover";
-
 				videoEl.onended = () => { advanceSlide(); };
-				videoEl.onerror = () => {
-					console.error("Video asset playback failed, skipping...");
-					advanceSlide();
-				};
+				videoEl.onerror = () => { console.error("Video failed, skipping..."); advanceSlide(); };
 				mediaContainer.appendChild(videoEl);
 
 			} else {
@@ -472,7 +280,6 @@
 				imgEl.src = currentSlide.imageUrl;
 				imgEl.alt = "Signage slide";
 				mediaContainer.appendChild(imgEl);
-				
 				slideshowTimeout = setTimeout(advanceSlide, currentSlide.duration || 5000);
 			}
 		}
@@ -484,151 +291,151 @@
 	</script>
 
 	<script>
-	// SCHEDULE (2)
-	function updateSchedule(){ const now = new Date(); const currentMinutes = (now.getHours() * 60) + now.getMinutes(); let statusText = "Free Time";
-		const schedule = [
-			{name: "bk.png", start: 480, end: 530},  // 08:00-08:50 bk
-			{name: "p1.png", start: 530, end: 580},  // 08:50-09:40 p1
-			{name: "p2.png", start: 580, end: 632},  // 09:40-10:32 p2
-			{name: "p3.png", start: 632, end: 686},  // 10:32-11:24 p3
-			{name: "lc.png", start: 686, end: 738},  // 11:26-12:18 lch
-			{name: "p5.png", start: 738, end: 788},  // 12:18-01:08 p5
-			{name: "p6.png", start: 788, end: 840},  // 01:08-02:00 p6
-			{name: "p7.png", start: 840, end: 890},  // 02:00-02:50 prep
-			{name: "cl.png", start: 890, end: 960}   // 02:50-04:00 gn
-		];
-		const activePeriod = schedule.find(p => currentMinutes >= p.start && currentMinutes < p.end);
-		if (activePeriod) { statusText = activePeriod.name; } else if (currentMinutes < 480) { statusText = "bk.png"; } 
-		else if (currentMinutes >= 960) { statusText = "cl.png"; }
-		var Image_Id = document.getElementById('schedule-period'); 
-		if(Image_Id) {
-			var newURL = "schedule/" + statusText;
-			Image_Id.src = newURL;
-			console.log("PERIOD: " + newURL);
+		// SCHEDULE
+		function updateSchedule(){ 
+			const now = new Date(); 
+			const currentMinutes = (now.getHours() * 60) + now.getMinutes(); 
+			let statusText = "Free Time";
+			const schedule = [
+				{name: "bk.png", start: 480, end: 530},  
+				{name: "p1.png", start: 530, end: 580},  
+				{name: "p2.png", start: 580, end: 632},  
+				{name: "p3.png", start: 632, end: 686},  
+				{name: "lc.png", start: 686, end: 738},  
+				{name: "p5.png", start: 738, end: 788},  
+				{name: "p6.png", start: 788, end: 840},  
+				{name: "p7.png", start: 840, end: 890},  
+				{name: "cl.png", start: 890, end: 960}   
+			];
+			const activePeriod = schedule.find(p => currentMinutes >= p.start && currentMinutes < p.end);
+			if (activePeriod) { statusText = activePeriod.name; } else if (currentMinutes < 480) { statusText = "bk.png"; } 
+			else if (currentMinutes >= 960) { statusText = "cl.png"; }
+			
+			var Image_Id = document.getElementById('schedule-period'); 
+			if(Image_Id) {
+				var newURL = "schedule/" + statusText;
+				Image_Id.src = newURL;
+			}
 		}
-	}
-	updateSchedule();
-	setInterval(updateSchedule, 60000);
+		updateSchedule();
+		setInterval(updateSchedule, 60000);
 
-	// WEATHER (4)
-		const apiKey = '3705bab40a0bc21845733bbd24c752ba'; const lat = 40.7549; const lon = -73.9840;
+		// WEATHER
+		const apiKey = '3705bab40a0bc21845733bbd24c752ba'; 
+		const lat = 40.7549; 
+		const lon = -73.9840;
 		const meteoconMap = {
-			    '01d': 'clear-day','01n': 'clear-night',
-			    '02d': 'partly-cloudy-day','02n': 'partly-cloudy-night',
-			    '03d': 'cloudy','03n': 'cloudy',
-			    '04d': 'overcast-day','04n': 'overcast-night',
-			    '09d': 'extreme-rain','09n': 'extreme-rain',
-			    '10d': 'rain','10n': 'rain',
-			    '11d': 'thunderstorms-day','11n': 'thunderstorms-night',
-			    '13d': 'snow','13n': 'snow',
-			    '50d': 'fog-day','50n': 'fog-night' };
-		async function updateWeather() { try {
-				const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`); if (!res.ok) throw new Error('API Error'); const data = await res.json();
+			'01d': 'clear-day','01n': 'clear-night',
+			'02d': 'partly-cloudy-day','02n': 'partly-cloudy-night',
+			'03d': 'cloudy','03n': 'cloudy',
+			'04d': 'overcast-day','04n': 'overcast-night',
+			'09d': 'extreme-rain','09n': 'extreme-rain',
+			'10d': 'rain','10n': 'rain',
+			'11d': 'thunderstorms-day','11n': 'thunderstorms-night',
+			'13d': 'snow','13n': 'snow',
+			'50d': 'fog-day','50n': 'fog-night' 
+		};
+
+		async function updateWeather() { 
+			try {
+				const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`); 
+				if (!res.ok) throw new Error('API Error'); 
+				const data = await res.json();
 				document.getElementById('temp').innerText = `${Math.round(data.main.temp)}°`;
 				document.getElementById('desc').innerText = data.weather[0].description;
 				const iconCode = data.weather[0].icon;
 				const meteoconName = meteoconMap[iconCode] || 'not-available'; 
 				const iconContainer = document.getElementById('icon-container');
 				const iconURL = `<img src="https://cdn.meteocons.com/3.0.0-next.10/svg/fill/${meteoconName}.svg" alt="weather" width="100" height="100">`; 
-				if(iconContainer) iconContainer.innerHTML = iconURL; } catch (err) { const descEl = document.getElementById('desc'); if(descEl) descEl.innerText = "Check API Key";  console.error(err); } } 
+				if(iconContainer) iconContainer.innerHTML = iconURL; 
+			} catch (err) { 
+				const descEl = document.getElementById('desc'); 
+				if(descEl) descEl.innerText = "Weather Error";  
+				console.error(err); 
+			} 
+		} 
 		updateWeather();
-	
-	// NEWS
-	const NYT_API_KEY = "fA2AACnKOZWVnU8C0kcCLkivelqlxDQc";
-	const NYT_SECTION = "home";
-	const apiUrl = `https://api.nytimes.com/svc/topstories/v2/${NYT_SECTION}.json?api-key=${NYT_API_KEY}`;
-	const ARTICLE_COUNT = 3;
-	let articlesData = [];
-	let currentIndex = 0;
-	
-	const carouselContent = document.getElementById('carousel-content');
-	const loadingMessage = document.getElementById('loading-message');
+		setInterval(updateWeather, 600000); 
 
-	function renderArticle(index){
-		if(articlesData.length === 0 || !carouselContent) return;
-		const article = articlesData[index];
-		let imageUrl = "";
-		let imageAlt = "Article image";
+		// NEWS
+		const NYT_API_KEY = "fA2AACnKOZWVnU8C0kcCLkivelqlxDQc";
+		const NYT_SECTION = "home";
+		const apiUrl = `https://api.nytimes.com/svc/topstories/v2/${NYT_SECTION}.json?api-key=${NYT_API_KEY}`;
+		const ARTICLE_COUNT = 3;
+		let articlesData = [];
+		let currentIndex = 0;
 		
-		if(article.multimedia && article.multimedia.length > 0){
-			const image = article.multimedia[2] || article.multimedia[0];
-			imageUrl = image.url;
-			imageAlt = image.caption || article.title;
+		const carouselContent = document.getElementById('carousel-content');
+		const loadingMessage = document.getElementById('loading-message');
+
+		function renderArticle(index){
+			if(articlesData.length === 0 || !carouselContent) return;
+			const article = articlesData[index];
+			let imageUrl = "";
+			let imageAlt = "Article image";
+			
+			if(article.multimedia && article.multimedia.length > 0){
+				const image = article.multimedia[2] || article.multimedia[0];
+				imageUrl = image.url;
+				imageAlt = image.caption || article.title;
+			}
+			
+			carouselContent.innerHTML = `
+				<div class="article-card">
+					<div class="article-content">${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}" class="article-image">` : ''}
+						<h3>${article.title}</h3>
+						<p>${article.abstract}</p>
+					</div>
+				</div>`;
 		}
-		
-		carouselContent.innerHTML = `
-			<div class="article-card">
-				<div class="article-content">${imageUrl ? `<img src="${imageUrl}" alt="${imageAlt}" class="article-image">` : ''}
-					<h3>${article.title}</h3>
-					<p>${article.abstract}</p>
-				</div>
-			</div>`;
-	}
 
-	async function fetchNews(){
-		try {
-			const response = await fetch(apiUrl);
-			if(!response.ok){
-				if(response.status === 401 || response.status === 403){
-					throw new Error("API Key error. Make sure your key is correct.");
+		async function fetchNews(){
+			try {
+				const response = await fetch(apiUrl);
+				if(!response.ok) throw new Error(`Network error: ${response.statusText}`);
+				const data = await response.json();
+				articlesData = data.results.filter(a => a.title && a.url && a.abstract).slice(0, ARTICLE_COUNT);
+				if(articlesData.length === 0) throw new Error("No valid articles.");
+				if(loadingMessage) loadingMessage.style.display = 'none';
+				currentIndex = 0;
+				renderArticle(currentIndex);
+			} catch(error) {
+				console.error("Failed to fetch news:", error);
+				if(loadingMessage) {
+					loadingMessage.textContent = "Failed to load news.";
+					loadingMessage.className = 'error';
 				}
-				throw new Error(`Network error: ${response.statusText}`);
-			}
-			const data = await response.json();
-			articlesData = data.results.filter(a => a.title && a.url && a.abstract).slice(0, ARTICLE_COUNT);
-			
-			if(articlesData.length === 0){
-				throw new Error("No valid articles found.");
-			}
-			
-			if(loadingMessage) loadingMessage.style.display = 'none';
-			currentIndex = 0;
-			renderArticle(currentIndex);
-		} catch(error) {
-			console.error("Failed to fetch news:", error);
-			if(loadingMessage) {
-				loadingMessage.textContent = `Failed to load news. ${error.message}`;
-				loadingMessage.className = 'error';
 			}
 		}
-	}
 
-	const nextArticle = function(){
-		currentIndex = (currentIndex + 1) % articlesData.length;
-		renderArticle(currentIndex);
-	};
-	
-	setInterval(nextArticle, 10000);
-	document.addEventListener('DOMContentLoaded', fetchNews);
+		setInterval(() => {
+			if(articlesData.length > 0) {
+				currentIndex = (currentIndex + 1) % articlesData.length;
+				renderArticle(currentIndex);
+			}
+		}, 10000);
+		document.addEventListener('DOMContentLoaded', fetchNews);
 
-	// DAY DATE TIME (8)
-	var setDaydatetime = function(){
-		const now = new Date();
-		const timeOptions = {hour: 'numeric', minute: '2-digit', hour12: true};
-		const formattedTime = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
-		const timeEl = document.getElementById('time');
-		if(timeEl) timeEl.textContent = formattedTime;
-	};
+		// CLOCK & CALENDAR
+		function getOrdinalDate(date){
+			const day = date.getDate();
+			const s = ['th', 'st', 'nd', 'rd'];
+			const v = day % 100;
+			return day + (s[(v - 20) % 10] || s[v] || s[0]);
+		}
 
-	const clockNow = new Date();
-	const dayOptions = {weekday: 'long'};
-	const dayEl = document.getElementById('day');
-	if(dayEl) dayEl.textContent = new Intl.DateTimeFormat('en-US', dayOptions).format(clockNow);
-
-	function getOrdinalDate(date){
-		const day = date.getDate();
-		const s = ['th', 'st', 'nd', 'rd'];
-		const v = day % 100;
-		return day + (s[(v - 20) % 10] || s[v] || s[0]);
-	}
-
-	const monthYearOptions = {year: 'numeric', month: 'long'};
-	const monthYear = new Intl.DateTimeFormat('en-US', monthYearOptions).format(clockNow);
-	const fullDateText = monthYear.replace(/\d+/, getOrdinalDate(clockNow));
-	const dateEl = document.getElementById('date');
-	if(dateEl) dateEl.textContent = fullDateText;
-
-	setDaydatetime();
-	setInterval(setDaydatetime, 10000);
-</script>
+		function updateClockAndCalendar() {
+			const now = new Date();
+			const timeOptions = { hour: 'numeric', minute: '2-digit', hour12: true };
+			const timeEl = document.getElementById('time');
+			if(timeEl) timeEl.textContent = new Intl.DateTimeFormat('en-US', timeOptions).format(now);
+			const dayEl = document.getElementById('day');
+			if(dayEl) dayEl.textContent = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(now);
+			const monthYear = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' }).format(now);
+			const dateEl = document.getElementById('date');
+			if(dateEl) dateEl.textContent = monthYear.replace(/\d+/, getOrdinalDate(now));
+		}
+		updateClockAndCalendar();
+		setInterval(updateClockAndCalendar, 10000);
+	</script>
 </html>
