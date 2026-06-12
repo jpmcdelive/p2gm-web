@@ -175,7 +175,7 @@
 		
 		const quotationContainer = document.getElementById('quotation');
 		const dayOffContainer = document.getElementById('next-day-off');
-		const globalConfigRef = doc(db, "displayConfig", "globalSettings");
+		const globalConfigRef = doc(db, "config", "global");
 
 		onSnapshot(globalConfigRef, (docSnap) => {
 			if (docSnap.exists()) {
