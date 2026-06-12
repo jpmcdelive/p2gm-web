@@ -9,6 +9,11 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
+  // --- FIX 1: Bypass caching for POST or any non-GET requests immediately ---
+  if (e.request.method !== 'GET') {
+    return; 
+  }
+
   const url = e.request.url;
 
   // Intercept Firebase Storage assets, local schedule images, and school site assets
@@ -20,7 +25,8 @@ self.addEventListener('fetch', (e) => {
             // Serve cached asset immediately, but fetch a fresh copy in the background
             fetch(e.request).then((networkResponse) => {
               if (networkResponse.status === 200) {
-                cache.put(e.request, networkResponse);
+                // --- FIX 2: Added .clone() here to prevent stream-reading errors ---
+                cache.put(e.request, networkResponse.clone()); 
               }
             }).catch(() => {});
             
