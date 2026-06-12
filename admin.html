@@ -206,12 +206,18 @@
       return trimmed.length === 11 ? trimmed : null;
     }
 
+    // FIXED: Upgraded snapshot block logic to ensure accurate data recovery and handle un-initialized database documents cleanly
     onSnapshot(globalConfigRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        if(data.currentQuote) quoteInput.value = data.currentQuote;
-        if(data.quoteAuthor) authorInput.value = data.quoteAuthor;
-        if(data.nextDayOff) dayOffInput.value = data.nextDayOff;
+        quoteInput.value = data.currentQuote !== undefined ? data.currentQuote : "";
+        authorInput.value = data.quoteAuthor !== undefined ? data.quoteAuthor : "";
+        dayOffInput.value = data.nextDayOff !== undefined ? data.nextDayOff : "";
+      } else {
+        // Safe defaults if configuration document hasn't been instantiated yet
+        quoteInput.value = "";
+        authorInput.value = "";
+        dayOffInput.value = "";
       }
     });
 
@@ -230,6 +236,7 @@
         contentStatus.innerText = "Signage overlays compiled live!";
         setTimeout(() => { contentStatus.innerText = ""; }, 4000);
       } catch (error) {
+        console.error("Firestore Write Error: ", error);
         contentStatus.className = "status-msg status-error";
         contentStatus.innerText = "Database pipeline connection error.";
       } finally {
