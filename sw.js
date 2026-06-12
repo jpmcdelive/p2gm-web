@@ -4,13 +4,16 @@ self.addEventListener('install', (e) => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(clients.claim());
-});
+self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
 
-self.addEventListener('fetch', (e) => {
-  const url = e.request.url;
-
+self.addEventListener('fetch', (e) => { const url = e.request.url;
+  e.respondWith(caches.match(e.request).then((cachedResponse) => { if (cachedResponse) { return cachedResponse; }
+      return fetch(e.request).then((response) => { if (e.request.method === 'GET' && response.status === 200 && response.type === 'basic') { 
+        const responseToCache = response.clone(); caches.open('my-cache-v1').then((cache) => { cache.put(e.request, responseToCache); }); }
+      return response;
+  });
+})
+);
   // Intercept Firebase Storage assets, local schedule images, and school site assets
   if (url.includes('firebasestorage.googleapis.com') || url.includes('/schedule/') || url.includes('school%20site/')) {
     e.respondWith(
