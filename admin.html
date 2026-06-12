@@ -160,6 +160,8 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
+    const globalConfigRef = doc(db, "config", "global");
+
     const quoteInput = document.getElementById('quoteInput');
     const authorInput = document.getElementById('authorInput');
     const dayOffInput = document.getElementById('dayOffInput');
