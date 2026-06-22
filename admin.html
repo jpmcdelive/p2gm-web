@@ -161,7 +161,8 @@
     const db = getFirestore(app);
     const storage = getStorage(app);
 
-    const globalConfigRef = doc(db, "config", "global");
+    // FIXED: Synced paths back to match 'displayConfig/globalSettings' structure used by displays
+    const globalConfigRef = doc(db, "displayConfig", "globalSettings");
 
     const quoteInput = document.getElementById('quoteInput');
     const authorInput = document.getElementById('authorInput');
@@ -206,15 +207,14 @@
       return trimmed.length === 11 ? trimmed : null;
     }
 
-    // FIXED: Upgraded snapshot block logic to ensure accurate data recovery and handle un-initialized database documents cleanly
+    // FIXED: Property parsing to safely block empty database objects from throwing errors
     onSnapshot(globalConfigRef, (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
-        quoteInput.value = data.currentQuote !== undefined ? data.currentQuote : "";
-        authorInput.value = data.quoteAuthor !== undefined ? data.quoteAuthor : "";
-        dayOffInput.value = data.nextDayOff !== undefined ? data.nextDayOff : "";
+        quoteInput.value = data.currentQuote || "";
+        authorInput.value = data.quoteAuthor || "";
+        dayOffInput.value = data.nextDayOff || "";
       } else {
-        // Safe defaults if configuration document hasn't been instantiated yet
         quoteInput.value = "";
         authorInput.value = "";
         dayOffInput.value = "";
@@ -244,11 +244,9 @@
       }
     });
 
-    // --- INSTANT BLOB PRE-CACHE GENERATION FOR PREVIEWS ---
     function handleFileTypeChange() {
       const file = fileInput.files[0];
       
-      // Clear old object URL cache tracking to avoid memory leaks
       if (currentObjectUrl) {
         URL.revokeObjectURL(currentObjectUrl);
         currentObjectUrl = null;
@@ -259,7 +257,6 @@
         return;
       }
 
-      // Generate a lightning-fast local cache pointer link
       currentObjectUrl = URL.createObjectURL(file);
       localCachePreview.style.display = "block";
 
