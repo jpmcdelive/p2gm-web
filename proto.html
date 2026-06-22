@@ -125,15 +125,14 @@
 		import { getFirestore, collection, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 		
 		const firebaseConfig = { 
-			apiKey: "AIzaSyCQUoKboMug0By7UrR07c3R-C3NFUYQ0wA", 
-			authDomain: "p2gm-displays.firebaseapp.com", 
-			projectId: "p2gm-displays",
-			storageBucket: "p2gm-displays.firebasestorage.app", 
-			messagingSenderId: "80141648110", 
-			appId: "1:80141648110:web:f5aafa668e019376c433ff", 
-			measurementId: "G-SG5K4C2H41" 
+		    apiKey: "AIzaSyCQUoKboMug0By7UrR07c3R-C3NFUYQ0wA", 
+		    authDomain: "p2gm-content.firebaseapp.com",       // <-- UPDATED
+		    projectId: "p2gm-content",                    // <-- UPDATED
+		    storageBucket: "p2gm-content.firebasestorage.app", // <-- UPDATED
+		    messagingSenderId: "80141648110", 
+		    appId: "1:80141648110:web:f5aafa668e019376c433ff", 
+		    measurementId: "G-SG5K4C2H41" 
 		};
-
 		const app = initializeApp(firebaseConfig);  
 		const db = getFirestore(app);  
 		let slides = [];  
